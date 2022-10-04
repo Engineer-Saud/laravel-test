@@ -41,4 +41,25 @@ class EventService
 
         return collect([]);
     }//end findAll()
+
+
+    /**
+     * Function getEventsOfFutureWorkshop
+     *
+     * @param string $dateTime
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getEventsOfFutureWorkshop(string $dateTime)
+    {
+        try {
+            return Event::whereHas('workshops', function ($query) use ($dateTime) {
+                $query->where('start', '>', $dateTime);
+            })->with('workshops')->get();
+        } catch (Throwable $exception) {
+            report($exception);
+        }
+
+        return collect([]);
+    }//end getEventsOfFutureWorkshop()
 }//end class

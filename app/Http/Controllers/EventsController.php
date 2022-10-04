@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Workshop;
 use App\Services\EventService;
+use App\Services\WorkshopService;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -190,6 +193,16 @@ class EventsController extends BaseController
      */
 
     public function getFutureEventsWithWorkshops() {
-        throw new \Exception('implement in coding task 2');
+        try {
+            $workshop = resolve(WorkshopService::class)->getFirstRecord();
+
+            if ($workshop) {
+                return resolve(EventService::class)->getEventsOfFutureWorkshop($workshop->start);
+            }
+        } catch (Throwable $exception) {
+            report($exception);
+        }
+        return collect([]);
     }
 }
+

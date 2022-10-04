@@ -92,7 +92,18 @@ class MenuController extends BaseController
     ]
      */
 
+
+    /**
+     * Function getMenuItems
+     *
+     *
+     * @return mixed
+     */
     public function getMenuItems() {
-        throw new \Exception('implement in coding task 3');
+        try {
+            return MenuItem::where('parent_id', null)->get();
+        } catch (\Throwable $exception) {
+            report($exception);
+        }
     }
 }
